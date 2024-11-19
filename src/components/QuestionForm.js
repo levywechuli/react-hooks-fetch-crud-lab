@@ -41,7 +41,7 @@ function QuestionForm({ onAddQuestion }) {
       correctIndex: parseInt(formData.correctIndex),
     };
 
-    console.log("Submitting question:", newQuestion);
+  
 
     try {
       const response = await fetch("http://localhost:4000/questions", {
@@ -54,7 +54,7 @@ function QuestionForm({ onAddQuestion }) {
 
       if (response.ok) {
         const createdQuestion = await response.json();
-        console.log("Question created:", createdQuestion);
+      
 
       
         if (isMounted) {

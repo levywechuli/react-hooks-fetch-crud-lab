@@ -10,13 +10,13 @@ function QuestionForm({ onAddQuestion }) {
     correctIndex: 0,
   });
 
-  // Flag to track if the component is mounted
+ 
   const [isMounted, setIsMounted] = useState(true);
 
-  // Cleanup on unmount
+  
   React.useEffect(() => {
     return () => {
-      setIsMounted(false); // Set isMounted to false when the component unmounts
+      setIsMounted(false); 
     };
   }, []);
 
@@ -56,7 +56,7 @@ function QuestionForm({ onAddQuestion }) {
         const createdQuestion = await response.json();
         console.log("Question created:", createdQuestion);
 
-        // Only update state if the component is still mounted
+      
         if (isMounted) {
           onAddQuestion(createdQuestion);
           setFormData({

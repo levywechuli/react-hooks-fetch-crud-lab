@@ -11,7 +11,7 @@ function QuestionList({ questions, onDelete }) {
             <QuestionItem
               key={question.id}
               question={question}
-              onDelete={onDelete} // Pass onDelete to each QuestionItem
+              onDelete={onDelete}
             />
           ))
         ) : (

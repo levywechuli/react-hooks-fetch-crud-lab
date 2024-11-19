@@ -9,22 +9,20 @@ function QuestionItem({ question, onDelete }) {
     </option>
   ));
 
-  const handleDelete = async () => {
-    try {
-      // Send DELETE request to the API
-      const response = await fetch(`http://localhost:4000/questions/${id}`, {
-        method: "DELETE",
+  const handleDelete = () => {
+    fetch(`http://localhost:4000/questions/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          onDelete(id);
+        } else {
+          console.error("Error deleting question:", response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting question:", error);
       });
-
-      if (response.ok) {
-        // Call onDelete passed from App to remove the question from state
-        onDelete(id);
-      } else {
-        console.error("Error deleting question:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error deleting question:", error);
-    }
   };
 
   return (

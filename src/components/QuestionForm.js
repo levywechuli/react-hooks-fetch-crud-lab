@@ -10,7 +10,16 @@ function QuestionForm({ onAddQuestion }) {
     correctIndex: 0,
   });
 
-  // Handle form field changes
+  // Flag to track if the component is mounted
+  const [isMounted, setIsMounted] = useState(true);
+
+  // Cleanup on unmount
+  React.useEffect(() => {
+    return () => {
+      setIsMounted(false); // Set isMounted to false when the component unmounts
+    };
+  }, []);
+
   function handleChange(event) {
     setFormData({
       ...formData,
@@ -18,11 +27,9 @@ function QuestionForm({ onAddQuestion }) {
     });
   }
 
-  // Handle form submission
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    // Prepare question data
+
     const newQuestion = {
       prompt: formData.prompt,
       answers: [
@@ -34,8 +41,9 @@ function QuestionForm({ onAddQuestion }) {
       correctIndex: parseInt(formData.correctIndex),
     };
 
+    console.log("Submitting question:", newQuestion);
+
     try {
-      // POST request to the backend API
       const response = await fetch("http://localhost:4000/questions", {
         method: "POST",
         headers: {
@@ -44,25 +52,29 @@ function QuestionForm({ onAddQuestion }) {
         body: JSON.stringify(newQuestion),
       });
 
-      // Check if the question was created successfully
       if (response.ok) {
         const createdQuestion = await response.json();
-        onAddQuestion(createdQuestion); // Update the parent state with the new question
-        setFormData({
-          prompt: "",
-          answer1: "",
-          answer2: "",
-          answer3: "",
-          answer4: "",
-          correctIndex: 0,
-        }); // Clear form after submission
+        console.log("Question created:", createdQuestion);
+
+        // Only update state if the component is still mounted
+        if (isMounted) {
+          onAddQuestion(createdQuestion);
+          setFormData({
+            prompt: "",
+            answer1: "",
+            answer2: "",
+            answer3: "",
+            answer4: "",
+            correctIndex: 0,
+          });
+        }
       } else {
         console.error("Error creating question:", response.statusText);
       }
     } catch (error) {
       console.error("Error submitting question:", error);
     }
-  }
+  };
 
   return (
     <section>

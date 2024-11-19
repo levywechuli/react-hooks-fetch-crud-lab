@@ -8,25 +8,20 @@ function App() {
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/questions");
-        const data = await response.json();
+    fetch("http://localhost:4000/questions")
+      .then((response) => response.json())
+      .then((data) => {
         setQuestions(data);
-      } catch (error) {
+      })
+      .catch((error) => {
         console.error("Error fetching questions:", error);
-      }
-    };
-
-    fetchQuestions();
+      });
   }, []);
 
-  // Handle adding a new question
   function handleAddQuestion(newQuestion) {
     setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
   }
 
-  // Handle deleting a question
   function handleDeleteQuestion(id) {
     setQuestions((prevQuestions) => prevQuestions.filter((q) => q.id !== id));
   }
